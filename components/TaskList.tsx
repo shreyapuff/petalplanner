@@ -1,17 +1,36 @@
-// components/TaskList.tsx
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
+
 import { useEffect, useState } from 'react'
 import { db } from '@/lib/firebase'
-import { collection, onSnapshot, query, orderBy } from 'firebase/firestore'
+import {
+  collection,
+  onSnapshot,
+  query,
+  orderBy,
+  Timestamp,
+  DocumentData,
+} from 'firebase/firestore'
+
+interface Task {
+  id: string
+  text: string
+  createdAt: Timestamp
+}
 
 export default function TaskList() {
-  const [tasks, setTasks] = useState<any[]>([])
+  const [tasks, setTasks] = useState<Task[]>([])
 
   useEffect(() => {
     const q = query(collection(db, 'tasks'), orderBy('createdAt', 'desc'))
+
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      setTasks(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })))
+      const tasksData: Task[] = snapshot.docs.map((doc: DocumentData) => ({
+        id: doc.id,
+        ...(doc.data() as Omit<Task, 'id'>),
+      }))
+
+      setTasks(tasksData)
     })
 
     return () => unsubscribe()
@@ -19,7 +38,7 @@ export default function TaskList() {
 
   return (
     <div className="p-4 space-y-2">
-      {tasks.map(task => (
+      {tasks.map((task) => (
         <div key={task.id} className="bg-white rounded-xl p-3 shadow-sm border">
           {task.text}
         </div>
@@ -27,3 +46,4 @@ export default function TaskList() {
     </div>
   )
 }
+/* eslint-enable @typescript-eslint/no-explicit-any */
