@@ -93,7 +93,6 @@ export default function Home() {
 
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center bg-pink-50 p-4 overflow-hidden">
-
       {/* ✨ Animated Cloud Background */}
       <motion.div
         className="absolute top-0 left-0 w-full h-full z-0 overflow-hidden"
@@ -120,7 +119,7 @@ export default function Home() {
 
         {/* Mood Picker */}
         <div className="mt-2 mb-4 flex flex-col items-center">
-          <p className="text-sm text-pink-600">Today's Mood:</p>
+          <p className="text-sm text-pink-600">Today&apos;s Mood:</p>
           <div className="flex gap-2 mt-1">
             {["😴", "😐", "😊", "🥰", "✨"].map((emoji) => (
               <button

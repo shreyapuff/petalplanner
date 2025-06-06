@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { db } from '@/lib/firebase'
+import { useEffect, useState } from 'react';
+import { db } from '@/lib/firebase';
 import {
   collection,
   onSnapshot,
@@ -10,31 +10,31 @@ import {
   Timestamp,
   DocumentData,
   QuerySnapshot,
-} from 'firebase/firestore'
+} from 'firebase/firestore';
 
 interface Task {
-  id: string
-  text: string
-  createdAt: Timestamp
+  id: string;
+  text: string;
+  createdAt: Timestamp;
 }
 
 export default function TaskList() {
-  const [tasks, setTasks] = useState<Task[]>([])
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
-    const q = query(collection(db, 'tasks'), orderBy('createdAt', 'desc'))
+    const q = query(collection(db, 'tasks'), orderBy('createdAt', 'desc'));
 
     const unsubscribe = onSnapshot(q, (snapshot: QuerySnapshot<DocumentData>) => {
       const tasksData: Task[] = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...(doc.data() as Omit<Task, 'id'>),
-      }))
+      }));
 
-      setTasks(tasksData)
-    })
+      setTasks(tasksData);
+    });
 
-    return () => unsubscribe()
-  }, [])
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div className="p-4 space-y-2">
@@ -44,5 +44,5 @@ export default function TaskList() {
         </div>
       ))}
     </div>
-  )
+  );
 }
