@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -10,6 +9,7 @@ import {
   orderBy,
   Timestamp,
   DocumentData,
+  QuerySnapshot,
 } from 'firebase/firestore'
 
 interface Task {
@@ -24,8 +24,8 @@ export default function TaskList() {
   useEffect(() => {
     const q = query(collection(db, 'tasks'), orderBy('createdAt', 'desc'))
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const tasksData: Task[] = snapshot.docs.map((doc: DocumentData) => ({
+    const unsubscribe = onSnapshot(q, (snapshot: QuerySnapshot<DocumentData>) => {
+      const tasksData: Task[] = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...(doc.data() as Omit<Task, 'id'>),
       }))
@@ -46,4 +46,3 @@ export default function TaskList() {
     </div>
   )
 }
-/* eslint-enable @typescript-eslint/no-explicit-any */
